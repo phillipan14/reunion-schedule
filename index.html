@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reunion Week — Robotics Visit Schedule</title>
+<style>
+:root{--bg:#0f1117;--card:#181b24;--card2:#1e2130;--border:#282b3a;--text:#e4e4e7;--muted:#9ca3af;--accent:#C45D35;--accent2:#e07050;--green:#22c55e;--blue:#3b82f6;--yellow:#eab308;--purple:#a855f7;--red:#ef4444;--reunion:#6366f1;--travel:#64748b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);padding:24px;max-width:1100px;margin:0 auto}
+a{color:var(--accent2);text-decoration:none}a:hover{text-decoration:underline}
+h1{font-size:26px;color:#fff;margin-bottom:2px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:20px}
+/* Controls */
+.ctrl{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:flex-end}
+.ctrl-group{display:flex;flex-direction:column;gap:3px}
+.ctrl-label{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700}
+.ctrl-btns{display:flex;border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.ctrl-btn{padding:6px 14px;background:var(--card);border:none;color:var(--muted);cursor:pointer;font-size:12px;font-weight:600;transition:.15s}
+.ctrl-btn:hover{background:#252836}
+.ctrl-btn.on{background:var(--accent);color:#fff}
+.ctrl-btn+.ctrl-btn{border-left:1px solid var(--border)}
+/* Summary */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.stat .n{font-size:24px;font-weight:700;color:#fff}
+.stat .l{font-size:11px;color:var(--muted);margin-top:1px}
+/* Legend */
+.legend{display:flex;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+/* Day */
+.day{margin-bottom:28px}
+.day-hdr{display:flex;align-items:center;gap:10px;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.day-dt{font-size:18px;font-weight:700;color:#fff}
+.day-tag{font-size:11px;padding:3px 9px;border-radius:14px;font-weight:600}
+.tag-rob{background:rgba(196,93,53,.15);color:var(--accent2)}
+.tag-cer{background:rgba(99,102,241,.15);color:#818cf8}
+.tag-buf{background:rgba(234,179,8,.15);color:var(--yellow)}
+.tag-co{background:rgba(100,116,139,.15);color:#94a3b8}
+.tag-night{font-size:10px;margin-left:auto;color:var(--muted);font-weight:400;font-style:italic}
+/* Table */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:4px 8px;border-bottom:1px solid var(--border);font-weight:600}
+td{padding:7px 8px;border-bottom:1px solid rgba(40,43,58,.5);vertical-align:top}
+tr.rob td{border-left:3px solid var(--accent)}
+tr.reu td{border-left:3px solid var(--reunion)}
+tr.trv td{border-left:3px solid var(--travel)}
+tr.skip td{opacity:.4;border-left-style:dashed}
+tr.cant td{border-left:3px solid var(--red);background:rgba(239,68,68,.03)}
+tr.agile-cond{display:none}
+tr.agile-cond.show{display:table-row}
+td.time{white-space:nowrap;font-weight:600;color:var(--muted);min-width:120px}
+td.what{font-weight:600}
+td.what small{font-weight:400;color:var(--muted);display:block;margin-top:1px;font-size:11px}
+td.loc{color:var(--muted);font-size:12px}
+.badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:8px;font-weight:700;vertical-align:middle;margin-left:4px}
+.b-visit{background:rgba(196,93,53,.18);color:var(--accent2)}
+.b-skip{background:rgba(100,116,139,.18);color:#94a3b8}
+.b-cant{background:rgba(239,68,68,.18);color:#f87171}
+.b-trv{background:rgba(100,116,139,.12);color:#94a3b8}
+.b-conf{background:rgba(34,197,94,.15);color:var(--green)}
+.b-med{background:rgba(234,179,8,.15);color:var(--yellow)}
+.b-low{background:rgba(239,68,68,.15);color:#f87171}
+/* Scenario notes */
+.sc-note{padding:10px 14px;background:rgba(196,93,53,.06);border:1px solid rgba(196,93,53,.15);border-radius:6px;font-size:12px;color:var(--muted);margin:8px 0;display:none}
+.sc-note.show{display:block}
+.sc-note strong{color:var(--accent2)}
+/* Readiness */
+.ready{margin-top:28px}
+.ready h3{font-size:15px;color:#fff;margin-bottom:10px}
+.ready table td{font-size:12px}
+/* Actions */
+.actions{margin-top:28px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px}
+.actions h3{font-size:15px;color:#fff;margin-bottom:10px}
+.act{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border)}
+.act:last-child{border-bottom:none}
+.sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sd-r{background:var(--red)}.sd-y{background:var(--yellow)}.sd-g{background:var(--green)}.sd-p{background:var(--purple)}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}table{font-size:11px}td.time{min-width:80px}}
+</style>
+</head>
+<body>
+
+<h1>Reunion Week — Robotics Visits</h1>
+<p class="sub">April 22–26, 2026 · Beijing · Schwarzman College 10-Year Anniversary</p>
+
+<div class="ctrl">
+  <div class="ctrl-group">
+    <span class="ctrl-label">AgileX Visit</span>
+    <div class="ctrl-btns">
+      <button class="ctrl-btn on" onclick="setAX('with',this)">With AgileX</button>
+      <button class="ctrl-btn" onclick="setAX('without',this)">Without</button>
+    </div>
+  </div>
+  <div class="ctrl-group" id="ax-loc-wrap">
+    <span class="ctrl-label">AgileX Location</span>
+    <div class="ctrl-btns" id="ax-loc">
+      <button class="ctrl-btn on" onclick="setAXL('bj',this)">Beijing (Sat)</button>
+      <button class="ctrl-btn" onclick="setAXL('sz',this)">Shenzhen (Apr 27-30)</button>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="n" id="sv">7</div><div class="l">Robotics Visits</div></div>
+  <div class="stat"><div class="n">3</div><div class="l">Days with Visits</div></div>
+  <div class="stat"><div class="n">4</div><div class="l">Must-Attend Events</div></div>
+  <div class="stat"><div class="n" id="sd">~5h</div><div class="l">Total Drive Time</div></div>
+</div>
+
+<div class="legend">
+  <div class="leg"><div class="dot" style="background:var(--accent)"></div>Robotics Visit</div>
+  <div class="leg"><div class="dot" style="background:var(--reunion)"></div>Reunion Event</div>
+  <div class="leg"><div class="dot" style="background:var(--travel)"></div>Travel</div>
+  <div class="leg"><div class="dot" style="background:var(--red)"></div>Can't Skip</div>
+  <div class="leg"><div class="dot" style="background:var(--border);opacity:.4"></div>Skipping</div>
+</div>
+
+<!-- ========== WED APR 22 ========== -->
+<div class="day">
+<div class="day-hdr">
+  <span class="day-dt">Wed, April 22</span>
+  <span class="day-tag tag-cer">Arrival</span>
+  <span class="tag-night">Sleep: Schwarzman College</span>
+</div>
+<table>
+<tr><th>Time</th><th>Event</th><th>Location</th><th>Status</th></tr>
+<tr class="reu"><td class="time">2:00 PM</td><td class="what">Hotel Check-In (Cohorts 1-9)</td><td class="loc">Lobby — <a href="https://www.shangri-la.com/hotels/jen/beijing/centraldistrict/">China World Hotel / Jen / Summit Wing / Kerry</a></td><td></td></tr>
+<tr class="cant"><td class="time">6:00–9:00 PM</td><td class="what">Welcome Reception<span class="badge b-cant">ATTEND</span></td><td class="loc">China World Summit Wing, Summit Ballroom</td><td></td></tr>
+</table>
+</div>
+
+<!-- ========== THU APR 23 ========== -->
+<div class="day">
+<div class="day-hdr">
+  <span class="day-dt">Thu, April 23</span>
+  <span class="day-tag tag-rob">Shijingshan + Yizhuang</span>
+  <span class="tag-night">Sleep: Schwarzman College</span>
+</div>
+<table>
+<tr><th>Time</th><th>Event</th><th>Location</th><th>Status</th></tr>
+<tr class="trv"><td class="time">8:00 AM</td><td class="what">Depart Schwarzman → Shijingshan<span class="badge b-trv">40 min</span></td><td class="loc">Drive west from Tsinghua</td><td></td></tr>
+<tr class="rob"><td class="time">9:00–10:00 AM</td><td class="what"><a href="https://www.realman-robotics.com/">RealMan Robot</a> — Data Training Center<span class="badge b-visit">VISIT</span><small>108-robot deployment, realistic scenarios. Contact: <a href="mailto:edward.liu@realman-robot.com">Edward Liu</a> (APAC Head)</small></td><td class="loc">3F, B4, No.6 Jin'an Sci-Fi Plaza, Gucheng St, <strong>Shijingshan</strong></td><td><span class="badge b-conf">HIGH</span></td></tr>
+<tr class="trv"><td class="time">10:00 AM</td><td class="what">Drive to Inspire<span class="badge b-trv">15 min</span></td><td class="loc">Within Shijingshan</td><td></td></tr>
+<tr class="rob"><td class="time">10:15–11:15 AM</td><td class="what"><a href="https://en.inspire-robots.com/">Inspire Robots</a> — Dexterous Hands<span class="badge b-visit">VISIT</span><small>Demo by Beijing colleague (Lorena is Shenzhen-based). Contact: <a href="mailto:lorena@inspire-robots.com">Lorena</a>, WeChat: +8615976890022</small></td><td class="loc">4F, Bldg 5, Shougang Park West Ten Winter Olympics Square, <strong>Shijingshan</strong></td><td><span class="badge b-med">MEDIUM</span></td></tr>
+<tr class="trv"><td class="time">11:15 AM</td><td class="what">Drive to Yizhuang<span class="badge b-trv">45 min</span></td><td class="loc">Southeast to Beijing E-Town</td><td></td></tr>
+<tr class="trv"><td class="time">12:00–12:45 PM</td><td class="what">Lunch</td><td class="loc">Yizhuang / E-Town area</td><td></td></tr>
+<tr class="rob"><td class="time">1:00–2:30 PM</td><td class="what"><a href="https://www.xiaomiev.com/hyperfactory">Xiaomi Auto Factory</a> Tour<span class="badge b-visit">VISIT</span><small>40 min exhibition hall + 20 min production line + test drive. Coordinating on WeChat.</small></td><td class="loc">Beijing E-Town, <strong>Yizhuang</strong> (near Tongyi Rd)</td><td><span class="badge b-conf">HIGH</span></td></tr>
+<tr class="trv"><td class="time">2:30 PM</td><td class="what">Drive to X-Humanoid<span class="badge b-trv">15 min</span></td><td class="loc">Within Yizhuang</td><td></td></tr>
+<tr class="rob"><td class="time">2:45–3:45 PM</td><td class="what"><a href="https://www.x-humanoid.com/">X-Humanoid</a> — Beijing Innovation Center for Humanoid Robotics<span class="badge b-visit">VISIT</span><small>Large-scale humanoid data collection base + isomorphic-arm teleoperation system. Contact: <a href="mailto:kelsie.ma@x-humanoid.com">Kelsie Ma</a></small></td><td class="loc">Robot Innovation Industrial Park, <strong>Yizhuang</strong></td><td><span class="badge b-conf">HIGH</span></td></tr>
+<tr class="trv"><td class="time">3:45 PM</td><td class="what">Drive to China World Hotel<span class="badge b-trv">30 min</span></td><td class="loc">Yizhuang → Chaoyang CBD</td><td></td></tr>
+<tr class="skip reu"><td class="time">9:30–11:30 AM</td><td class="what">SC: Cohort Connections<span class="badge b-skip">SKIP</span></td><td class="loc">China World Hotel</td><td></td></tr>
+<tr class="skip reu"><td class="time">1:30–3:30 PM</td><td class="what">SC: Breakout Sessions<span class="badge b-skip">SKIP</span></td><td class="loc">China World Hotel</td><td></td></tr>
+<tr class="cant"><td class="time">4:30–6:30 PM</td><td class="what">SC: Happy Hour + Pitch Night<span class="badge b-cant">ATTEND — PITCHING</span><small>Phillip is pitching Skylarq AI at Pitch Night. Must attend.</small></td><td class="loc"><a href="https://www.shangri-la.com/beijing/chinaworldhotel/">China World Hotel</a></td><td></td></tr>
+<tr class="trv"><td class="time">6:30 PM</td><td class="what">Drive to Schwarzman College<span class="badge b-trv">40 min</span></td><td class="loc">CBD → Tsinghua</td><td></td></tr>
+</table>
+</div>
+
+<!-- ========== FRI APR 24 ========== -->
+<div class="day">
+<div class="day-hdr">
+  <span class="day-dt">Fri, April 24</span>
+  <span class="day-tag tag-cer">Ceremony + Haidian Visits</span>
+  <span class="tag-night">Sleep: Schwarzman College</span>
+</div>
+<table>
+<tr><th>Time</th><th>Event</th><th>Location</th><th>Status</th></tr>
+<tr class="cant"><td class="time">9:00–9:30 AM</td><td class="what">Ceremony Registration</td><td class="loc">New Tsinghua Xuetang</td><td></td></tr>
+<tr class="cant"><td class="time">9:30 AM–12:30 PM</td><td class="what">SC: 10-Year Anniversary Ceremony & Panel<span class="badge b-cant">CAN'T SKIP</span></td><td class="loc">New Tsinghua Xuetang, Tsinghua University</td><td></td></tr>
+<tr class="trv"><td class="time">12:30–1:30 PM</td><td class="what">Lunch</td><td class="loc">On/near campus</td><td></td></tr>
+<tr class="skip reu"><td class="time">1:30–3:00 PM</td><td class="what">SC: Cohort Sporting Event<span class="badge b-skip">SKIP</span></td><td class="loc">Tsinghua East Sports Stadium</td><td></td></tr>
+<tr class="trv"><td class="time">2:30 PM</td><td class="what">Drive to 盈都大厦<span class="badge b-trv">10 min</span></td><td class="loc">Near Tsinghua</td><td></td></tr>
+<tr class="rob"><td class="time">3:00–3:40 PM</td><td class="what">Vivienne — <a href="https://air.tsinghua.edu.cn/">Tsinghua AIR</a> Data Collection<span class="badge b-visit">VISIT</span><small>Intro from Prof. Guyue Zhou. Discuss data formats & collection methods. WeChat: Vivienne-001</small></td><td class="loc">盈都大厦B座18层, <strong>Haidian</strong></td><td><span class="badge b-conf">HIGH</span></td></tr>
+<tr class="rob"><td class="time">3:40–4:20 PM</td><td class="what">Prof. Xu Huazhe — <a href="https://huazhe-xu.com/">TEA Lab</a><span class="badge b-visit">VISIT</span><small>Sample-efficient learning, dexterous manipulation. Will intro chief scientist. WeChat: 15104431687</small></td><td class="loc">盈都大厦B座18层, <strong>Haidian</strong> (same building)</td><td><span class="badge b-conf">HIGH</span></td></tr>
+<tr class="trv"><td class="time">4:20 PM</td><td class="what">Drive to Flexiv<span class="badge b-trv">15 min</span></td><td class="loc">Within Haidian</td><td></td></tr>
+<tr class="rob"><td class="time">4:45–5:30 PM</td><td class="what"><a href="https://www.flexiv.com/">Flexiv (非夕)</a> — Adaptive Force-Control Robots<span class="badge b-visit">VISIT</span><small>No email thread yet — need to send outreach. Silicon Valley + China company.</small></td><td class="loc">AI原点社区, Dongsheng Town (东升镇), <strong>Haidian</strong></td><td><span class="badge b-low">NOT CONTACTED</span></td></tr>
+<tr class="skip reu"><td class="time">3:30–5:30 PM</td><td class="what">SC: Visiting Hours at Schwarzman College<span class="badge b-skip">SKIP</span></td><td class="loc">Schwarzman College (Alumni only)</td><td></td></tr>
+<tr class="trv"><td class="time">5:30 PM</td><td class="what">Drive to dinner<span class="badge b-trv">15-40 min</span></td><td class="loc">Campus or CBD depending on venue</td><td></td></tr>
+<tr class="cant"><td class="time">6:30 PM</td><td class="what">Monad Ventures × Schwarzman Alumni Dinner<span class="badge b-cant">ATTEND</span></td><td class="loc">TBD</td><td></td></tr>
+</table>
+</div>
+
+<!-- ========== SAT APR 25 ========== -->
+<div class="day">
+<div class="day-hdr">
+  <span class="day-dt">Sat, April 25</span>
+  <span class="day-tag tag-buf">Buffer + Fireside</span>
+  <span class="tag-night">Sleep: Hotel Jen</span>
+</div>
+<table>
+<tr><th>Time</th><th>Event</th><th>Location</th><th>Status</th></tr>
+<tr class="reu"><td class="time">7:30 AM–3:30 PM</td><td class="what">SC: Tsinghua Anniversary Activities</td><td class="loc">Tsinghua University — flexible</td><td></td></tr>
+<tr class="reu"><td class="time">9:00 AM–12:00 PM</td><td class="what">SC: Visiting Hours at Schwarzman College</td><td class="loc">Schwarzman College — optional</td><td></td></tr>
+
+<!-- AgileX Beijing -->
+<tr class="rob agile-cond ax-bj"><td class="time">10:00–11:30 AM</td><td class="what"><a href="https://www.agilex.ai/">AgileX (松灵)</a> — Beijing Office<span class="badge b-visit">VISIT</span><small>Cobot Magic, Pika, PiPER demos. Contact: <a href="mailto:zhenzhen.zhou@agilex.ai">Zhenzhen Zhou</a>, WeChat: +8617727167903.<br><strong>Conditional:</strong> Only if Beijing office has equipment on-site AND is open Saturday. Email sent to confirm.</small></td><td class="loc">梦想实验室911室, North 3rd Ring, <strong>Beijing</strong></td><td><span class="badge b-low">AWAITING</span></td></tr>
+
+<tr class="reu"><td class="time">2:00 PM</td><td class="what">SC: C10 Hotel Check-in</td><td class="loc"><a href="https://www.shangri-la.com/hotels/jen/beijing/centraldistrict/">Hotel Jen</a> (move from Schwarzman)</td><td></td></tr>
+<tr class="trv"><td class="time">~4:30 PM</td><td class="what">Travel to Kerry Hotel<span class="badge b-trv">40 min or walk</span></td><td class="loc">Tsinghua → CBD (or already at Hotel Jen)</td><td></td></tr>
+<tr class="cant"><td class="time">5:30–6:30 PM</td><td class="what">SC: Fireside Chat with Stephen A. Schwarzman<span class="badge b-cant">CAN'T SKIP</span></td><td class="loc"><a href="https://www.shangri-la.com/beijing/kerryhotelbeijing/">Kerry Hotel</a>, Grand Ballroom</td><td></td></tr>
+<tr class="cant"><td class="time">6:30–11:30 PM</td><td class="what">SC: Reunion Reception<span class="badge b-cant">CAN'T SKIP</span></td><td class="loc">China World Summit Wing, Summit Ballroom</td><td></td></tr>
+</table>
+
+<div class="sc-note agile-cond ax-sz" id="ax-sz-note">
+  <strong>AgileX visit moved to Shenzhen trip (Apr 27-30)</strong> — Full equipment and demos at Shenzhen office: Room 5B06, Building 5, Phase 1, <a href="https://maps.apple.com/?q=Shenzhen+Software+Park+Nanshan">Shenzhen Software Park, Nanshan District</a>. Contact: <a href="mailto:zhenzhen.zhou@agilex.ai">Zhenzhen Zhou</a>.
+</div>
+<div class="sc-note agile-cond ax-no" id="ax-no-note">
+  <strong>No AgileX visit</strong> — Saturday free for Tsinghua Anniversary + prep for Schwarzman Fireside.
+</div>
+</div>
+
+<!-- ========== SUN APR 26 ========== -->
+<div class="day">
+<div class="day-hdr">
+  <span class="day-dt">Sun, April 26</span>
+  <span class="day-tag tag-co">Checkout</span>
+</div>
+<table>
+<tr><th>Time</th><th>Event</th><th>Location</th><th>Status</th></tr>
+<tr class="reu"><td class="time">7:30 AM–5:00 PM</td><td class="what">SC: Tsinghua Anniversary Activities (Day 2)</td><td class="loc">Tsinghua — flexible</td><td></td></tr>
+<tr class="cant"><td class="time">11:00 AM</td><td class="what">C10 Hotel Check-out<span class="badge b-cant">REQUIRED</span></td><td class="loc">Hotel Jen</td><td></td></tr>
+</table>
+<div class="sc-note agile-cond ax-sz" id="ax-sz-rem">
+  <strong>Shenzhen trip starts tomorrow (Apr 27)</strong> — AgileX Shenzhen visit during this trip.
+</div>
+</div>
+
+<!-- ========== READINESS ========== -->
+<div class="ready">
+<h3>Visit Readiness Assessment</h3>
+<table>
+<tr><th>Company</th><th>Has Equipment/Demo?</th><th>Confidence</th><th>Notes</th></tr>
+<tr><td><a href="https://www.realman-robotics.com/">RealMan</a></td><td>108-robot Data Training Center on-site</td><td><span class="badge b-conf">HIGH</span></td><td>Edward asked what Jack wants to explore — need to reply with details</td></tr>
+<tr><td><a href="https://en.inspire-robots.com/">Inspire</a></td><td>Lorena (Shenzhen) sending Beijing colleague</td><td><span class="badge b-med">MEDIUM</span></td><td>Need to confirm Beijing colleague has demo hands. Lorena offered WeChat.</td></tr>
+<tr><td><a href="https://www.xiaomiev.com/hyperfactory">Xiaomi</a></td><td>Structured factory tour — always available</td><td><span class="badge b-conf">HIGH</span></td><td>Coordinating on WeChat. 20-person tour slots.</td></tr>
+<tr><td><a href="https://www.x-humanoid.com/">X-Humanoid</a></td><td>Data collection base + isomorphic-arm system</td><td><span class="badge b-conf">HIGH</span></td><td>Kelsie actively invited — asked for preferred dates and demo priorities.</td></tr>
+<tr><td>Vivienne (AIR)</td><td>Academic meeting, not hardware demo</td><td><span class="badge b-conf">HIGH</span></td><td>Prof. Zhou intro'd, Vivienne responded. Add WeChat to confirm.</td></tr>
+<tr><td><a href="https://huazhe-xu.com/">Prof. Xu (TEA)</a></td><td>Lab visit + chief scientist intro</td><td><span class="badge b-conf">HIGH</span></td><td>Gave WeChat, expressed interest. Same building as Vivienne.</td></tr>
+<tr><td><a href="https://www.flexiv.com/">Flexiv</a></td><td>Unknown — no outreach yet</td><td><span class="badge b-low">NOT CONTACTED</span></td><td>Beijing office confirmed at AI原点社区. Need to send initial email.</td></tr>
+<tr><td><a href="https://www.agilex.ai/">AgileX</a></td><td>Beijing: "not yet on-site" (Apr 1)</td><td><span class="badge b-low">AWAITING</span></td><td>Email sent asking about Beijing equipment vs Shenzhen visit Apr 27-30.</td></tr>
+</table>
+</div>
+
+<!-- ========== ACTIONS ========== -->
+<div class="actions">
+<h3>Pending Actions</h3>
+<div class="act"><div class="sd sd-r"></div><strong>RealMan (Edward)</strong> — Reply: propose Thu 9AM, describe Jack's data collection interests</div>
+<div class="act"><div class="sd sd-r"></div><strong>Inspire (Lorena)</strong> — Reply: confirm Beijing, propose Thu 10:15AM, confirm demo equipment on-site</div>
+<div class="act"><div class="sd sd-p"></div><strong>Xiaomi</strong> — Confirm Thu 1PM on WeChat</div>
+<div class="act"><div class="sd sd-r"></div><strong>X-Humanoid (Kelsie)</strong> — Reply: propose Thu 2:45PM, request isomorphic-arm demo</div>
+<div class="act"><div class="sd sd-r"></div><strong>Vivienne (AIR)</strong> — Add WeChat: Vivienne-001, propose Fri 3PM</div>
+<div class="act"><div class="sd sd-p"></div><strong>Prof. Xu Huazhe</strong> — Add WeChat: 15104431687, propose Fri 3:40PM</div>
+<div class="act"><div class="sd sd-r"></div><strong>Flexiv</strong> — Send initial outreach email, propose Fri 4:45PM</div>
+<div class="act"><div class="sd sd-y"></div><strong>AgileX (Zhenzhen)</strong> — Email sent ✓ — awaiting reply on Beijing equipment / Shenzhen</div>
+</div>
+
+<p style="text-align:center;color:var(--muted);font-size:11px;margin-top:32px">Last updated: April 14, 2026 · Phillip An</p>
+
+<script>
+let axM='with',axL='bj';
+function setAX(m,el){axM=m;el.parentElement.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');document.getElementById('ax-loc-wrap').style.opacity=m==='without'?'.3':'1';document.getElementById('ax-loc-wrap').style.pointerEvents=m==='without'?'none':'auto';upd()}
+function setAXL(l,el){axL=l;el.parentElement.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');upd()}
+function upd(){document.querySelectorAll('.agile-cond').forEach(e=>e.classList.remove('show'));if(axM==='with'){if(axL==='bj'){document.querySelectorAll('.ax-bj').forEach(e=>e.classList.add('show'));document.getElementById('sv').textContent='8';document.getElementById('sd').textContent='~5.5h'}else{document.querySelectorAll('.ax-sz').forEach(e=>e.classList.add('show'));document.getElementById('sv').textContent='8';document.getElementById('sd').textContent='~5h'}}else{document.querySelectorAll('.ax-no').forEach(e=>e.classList.add('show'));document.getElementById('sv').textContent='7';document.getElementById('sd').textContent='~5h'}}
+upd();
+</script>
+</body>
+</html>
