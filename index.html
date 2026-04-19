@@ -89,15 +89,8 @@ td.loc{color:var(--muted);font-size:12px}
   <div class="ctrl-group">
     <span class="ctrl-label">AgileX Visit</span>
     <div class="ctrl-btns">
-      <button class="ctrl-btn on" onclick="setAX('with',this)">With AgileX</button>
-      <button class="ctrl-btn" onclick="setAX('without',this)">Without</button>
-    </div>
-  </div>
-  <div class="ctrl-group" id="ax-loc-wrap">
-    <span class="ctrl-label">AgileX Location</span>
-    <div class="ctrl-btns" id="ax-loc">
-      <button class="ctrl-btn on" onclick="setAXL('bj',this)">Beijing (Sat)</button>
-      <button class="ctrl-btn" onclick="setAXL('sz',this)">Shenzhen (Apr 27-30)</button>
+      <button class="ctrl-btn on" onclick="setAX('with',this)">Shenzhen (Apr 27–30)</button>
+      <button class="ctrl-btn" onclick="setAX('without',this)">Skip</button>
     </div>
   </div>
 </div>
@@ -191,8 +184,7 @@ td.loc{color:var(--muted);font-size:12px}
 <tr class="reu"><td class="time">9:00 AM – 12:00 PM</td><td class="what">SC: Visiting Hours at Schwarzman College</td><td class="loc">Schwarzman College — optional</td><td></td></tr>
 <tr class="cant"><td class="time">11:00 AM – 1:00 PM</td><td class="what">AI Leaders Salon<span class="badge b-cant">HOSTING</span><small>Private salon — 14 curated Schwarzman alumni + external guests (Chinese VCs, AI entrepreneurs). Structured networking + open discussion.</small></td><td class="loc">Private dining room, Sanlitun (~15 min from Guomao)</td><td></td></tr>
 
-<!-- AgileX Beijing -->
-<tr class="rob agile-cond ax-bj"><td class="time">10:00 – 11:30 AM</td><td class="what"><a href="https://www.agilex.ai/">AgileX (松灵)</a> — Beijing Office<span class="badge b-visit">VISIT</span><small>Cobot Magic, Pika, PiPER demos. Contact: <a href="mailto:zhenzhen.zhou@agilex.ai">Zhenzhen Zhou</a>, WeChat: +8617727167903.<br><em>Conditional: only if Beijing office has equipment AND is open Saturday. Email sent to confirm.</em></small></td><td class="loc">梦想实验室911室, North 3rd Ring, Beijing</td><td><span class="badge b-low">AWAITING</span></td></tr>
+<!-- AgileX moved to Shenzhen -->
 
 <tr class="reu"><td class="time">2:00 PM</td><td class="what">SC: C10 Hotel Check-in</td><td class="loc"><a href="https://www.shangri-la.com/hotels/jen/beijing/centraldistrict/">Hotel Jen</a> (move luggage from Schwarzman)</td><td></td></tr>
 <tr class="trv"><td class="time">~4:30 PM</td><td class="what">Travel to Kerry Hotel<span class="badge b-trv">walk or 10 min</span></td><td class="loc">Same Guomao complex</td><td></td></tr>
@@ -200,11 +192,8 @@ td.loc{color:var(--muted);font-size:12px}
 <tr class="cant"><td class="time">6:30 – 11:30 PM</td><td class="what">SC: Reunion Reception<span class="badge b-cant">CAN'T SKIP</span></td><td class="loc">China World Summit Wing, Summit Ballroom</td><td></td></tr>
 </table>
 
-<div class="sc-note agile-cond ax-sz">
-  <strong>AgileX visit moved to Shenzhen trip (Apr 27–30)</strong> — Full equipment and demos at Shenzhen office: Room 5B06, Building 5, <a href="https://maps.apple.com/?q=Shenzhen+Software+Park+Nanshan">Shenzhen Software Park, Nanshan</a>. Contact: <a href="mailto:zhenzhen.zhou@agilex.ai">zhenzhen.zhou@agilex.ai</a>
-</div>
-<div class="sc-note agile-cond ax-no">
-  <strong>No AgileX visit</strong> — Saturday free for Tsinghua Anniversary + Schwarzman Fireside prep.
+<div class="sc-note agile-cond">
+  <strong>AgileX → Shenzhen (Apr 27–30)</strong> — Zhenzhen confirmed Beijing office unavailable. Shenzhen HQ visit: A3-2, Nanshan Zhiyuan, Nanshan District. Cobot Magic, Pika, PiPER demos. Contact: <a href="mailto:zhenzhen.zhou@agilex.ai">zhenzhen.zhou@agilex.ai</a>, WeChat: +8617727167903. Awaiting date confirmation.
 </div>
 </div>
 
@@ -237,7 +226,7 @@ td.loc{color:var(--muted);font-size:12px}
 <tr><td>Vivienne (<a href="https://air.tsinghua.edu.cn/">AIR</a>)</td><td>Academic meeting — data collection discussion</td><td><span class="badge b-med">PENDING</span></td><td>Add WeChat Vivienne-001, propose Fri 3PM (manual)</td></tr>
 <tr><td>Prof. Xu (<a href="https://scholar.google.com/citations?user=X9dEDhcAAAAJ">TEA Lab</a>)</td><td>Lab visit + chief scientist intro</td><td><span class="badge b-med">PENDING</span></td><td>Add WeChat 15104431687, propose Fri 3:40PM (manual)</td></tr>
 <tr><td><a href="https://www.flexiv.com/">Flexiv</a></td><td>Unknown — not contacted yet</td><td><span class="badge b-low">NOT CONTACTED</span></td><td>No outreach sent — needs email or intro</td></tr>
-<tr><td><a href="https://www.agilex.ai/">AgileX</a></td><td>Beijing: equipment status unknown</td><td><span class="badge b-low">AWAITING</span></td><td>Re-engagement sent Apr 19 — asked about Sat Apr 25 morning visit</td></tr>
+<tr><td><a href="https://www.agilex.ai/">AgileX</a></td><td>Shenzhen HQ visit (Apr 27–30)</td><td><span class="badge b-med">PENDING</span></td><td>Pivoted to Shenzhen — email sent Apr 19, awaiting date confirmation</td></tr>
 <tr><td><a href="https://www.lejurobot.com/">Leju (乐聚)</a></td><td>10,000 sqm training center, 200 trainers, 100 robots</td><td><span class="badge b-low">AWAITING</span></td><td>Business partnership email sent Apr 19 (3rd attempt) — no prior response</td></tr>
 <tr><td><a href="https://www.01.ai/">01.AI</a></td><td>Office visit — enterprise AI agents</td><td><span class="badge b-med">PENDING</span></td><td>Email sent Apr 19 — picked Tue Apr 21 1:30 PM, awaiting Melody confirmation</td></tr>
 </table>
@@ -250,7 +239,7 @@ td.loc{color:var(--muted);font-size:12px}
 <div class="act"><div class="sd sd-g"></div><strong>Inspire (Lorena)</strong> — ✓ Follow-up sent Apr 19 — awaiting reply</div>
 <div class="act"><div class="sd sd-g"></div><strong>X-Humanoid (Kelsie Ma)</strong> — ✓ Corrective email sent Apr 19 — awaiting 2 PM confirmation</div>
 <div class="act"><div class="sd sd-g"></div><strong>01.AI (Melody)</strong> — ✓ Email sent Apr 19 — picked Tue Apr 21, 1:30 PM</div>
-<div class="act"><div class="sd sd-g"></div><strong>AgileX (Zhenzhen)</strong> — ✓ Re-engagement sent Apr 19 — asked about Sat Apr 25 morning</div>
+<div class="act"><div class="sd sd-g"></div><strong>AgileX (Zhenzhen)</strong> — ✓ Pivoted to Shenzhen (Apr 27–30) — awaiting date confirmation</div>
 <div class="act"><div class="sd sd-g"></div><strong>Leju (乐聚)</strong> — ✓ Business partnership email sent Apr 19 (to ad@, bd@, info@)</div>
 <div class="act"><div class="sd sd-r"></div><strong>Vivienne</strong> — Add WeChat: Vivienne-001, propose Fri 3PM (manual)</div>
 <div class="act"><div class="sd sd-r"></div><strong>Prof. Xu Huazhe</strong> — Add WeChat: 15104431687, propose Fri 3:40PM (manual)</div>
